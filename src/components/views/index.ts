@@ -27,6 +27,7 @@ const ShieldControl = React.lazy(() => import("./ShieldControl"));
 const Transporters = React.lazy(() => import("./Transporters"));
 const Login = React.lazy(() => import("./Login"));
 const SecurityDecks = React.lazy(() => import("./SecurityDecks"));
+const ScanningShip = React.lazy(() => import("./ScanningShip"));
 const SecurityScans = React.lazy(() => import("./SecurityScans"));
 const CommDecoding = React.lazy(() => import("./CommDecoding"));
 const Offline = React.lazy(() => import("./Offline"));
@@ -127,6 +128,7 @@ const EngineControlCore = React.lazy(() => import("./EngineControl/core"));
 const TransporterCore = React.lazy(() => import("./Transporters/core"));
 const SensorsGridCore = React.lazy(() => import("./Sensors/gridCore"));
 const SensorsCore = React.lazy(() => import("./Sensors/core"));
+const ScanningShipCore = React.lazy(() => import("./ScanningShip/core"));
 const ShieldControlCore = React.lazy(() => import("./ShieldControl/core"));
 const InternalCommCore = React.lazy(() => import("./CommInternal/core"));
 const SystemsCore = React.lazy(() => import("./DamageControl/core"));
@@ -235,6 +237,7 @@ const Views = {
   ShieldControl,
   Transporters,
   SecurityDecks,
+  ScanningShip,
   SecurityScans,
   CommDecoding,
   Offline,
@@ -433,6 +436,7 @@ export const Cores = {
   TransporterCore,
   SensorsGridCore,
   SensorsCore,
+  ScanningShipCore,
   ShieldControlCore,
   InternalCommCore,
   SystemsCore,
