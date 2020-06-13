@@ -23,6 +23,7 @@ export {default as Probes} from "./probes";
 export {default as StealthField} from "./stealthField";
 export {default as Coolant} from "./coolant";
 export {default as TractorBeam} from "./tractorBeam";
+export {default as ShipFires} from "./shipFires";
 export {System} from "./generic";
 
 export {default as Crew} from "./crew";

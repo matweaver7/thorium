@@ -385,10 +385,8 @@ class ActionsCore extends Component {
             <option value="speak">Speak</option>
             <option value="message">Message</option>
             {!bridgeMap && <option value="changeCard">Change Card</option>}
-            <hr />
 
             <option value="blackout">Blackout</option>
-            <hr />
 
             <option value="online">Online</option>
             <option value="offline">Offline</option>
@@ -398,7 +396,6 @@ class ActionsCore extends Component {
             <option value="soviet">Soviet</option>
             <option value="crack">Crack</option>
             <option value="uncrack">Un-Crack</option>
-            <hr />
             {flight.flightType && (
               <>
                 <option value="spaceEdventuresToken">
@@ -419,14 +416,12 @@ class ActionsCore extends Component {
               <option value="all">All Stations</option>
               <option value="bridge">Bridge Stations</option>
               <option value="random">Random Station</option>
-              <hr />
 
               {this.props.simulator.stations.map(s => (
                 <option key={s.name} value={s.name}>
                   {s.name}
                 </option>
               ))}
-              <hr />
 
               <option value="Viewscreen">Viewscreen</option>
             </select>

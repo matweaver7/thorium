@@ -102,7 +102,6 @@ const MissionSelector: React.FC<MissionSelectorProps> = ({
           <option value="classic">Classic</option>
           <option value="thumbnail">Thumbnail</option>
 
-          <hr />
           <option value="build">Build</option>
         </select>
       )}

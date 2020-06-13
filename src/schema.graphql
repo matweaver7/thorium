@@ -71,6 +71,8 @@ type Query {
   sensorContacts(simulatorId: ID, sensorsId: ID, hostile: Boolean, type: String): [SensorContact]
   sets: [Set]
   shields(simulatorId: ID): [Shield]
+  FireLayout(simulatorId: ID): [FireLayout]
+  Scan(simulatorId: ID, deckNumber: Int, zoneNumber: Int): [FireZone]
   shortRangeComm(simulatorId: ID!): [ShortRangeComm]
   sickbay(simulatorId: ID): [Sickbay]
   sickbaySingle(id: ID): Sickbay
@@ -815,6 +817,15 @@ type Mutation {
 
   """Macro: Actions: Print PDF Asset"""
   printPdf(asset: String!): String
+  updateFireLayout(firelayoutInput: FireLayoutInput!): String
+  addFireDeck(fireDeckInput: FireDeckInput!): String
+  removeFireDeck(removeFireInput: RemoveFireInput!): String
+  updateFireDeck(updateFireDeckInput: UpdateFireDeckInput): String
+  moveFireDeck(updateFireZoneInput: UpdateFireZoneInput): String
+  addFireZone(fireZoneInput: FireZoneInput!): String
+  removeFireZone(removeFireInput: RemoveFireInput!): String
+  updateFireZone(updateFireZoneInput: UpdateFireZoneInput): String
+  stopFire(stopfireInput: StopFireInput!): String
   commAddSignal(id: ID!, commSignalInput: CommSignalInput!): String
   commUpdateSignal(id: ID!, commSignalInput: CommSignalInput!): String
 
@@ -1403,6 +1414,8 @@ type Subscription {
   shieldsUpdate(simulatorId: ID): [Shield]
   notify(simulatorId: ID!, station: String, trigger: String): Notification
   widgetNotify(simulatorId: ID!, station: String): String
+  fireLayoutUpdated(simulatorId: ID): [FireLayout]
+  fireZoneStatusChanged(simulatorId: ID): [FireLayout]
   shortRangeCommUpdate(simulatorId: ID!): [ShortRangeComm]
   sickbayUpdate(simulatorId: ID): [Sickbay]
   signalJammersUpdate(simulatorId: ID!): [SignalJammer]
@@ -3300,6 +3313,114 @@ enum NotifyColors {
   info
   light
   dark
+}
+
+type FireLayout implements SystemInterface {
+  simulatorId: ID!
+  id: ID
+  type: String
+  name: String
+  displayName: String
+  upgradeName: String
+  upgraded: Boolean
+  damage: Damage
+  power: Power
+  stealthFactor: Float
+  locations: [Room]
+  numberOfFireDecks: Int
+  fireDecks: [FireDeck]
+}
+
+type FireDeck {
+  id: ID
+  name: String
+  deckNumber: Int
+  numberOfFireZones: Int
+  fireZones: [FireZone]
+}
+
+type FireZone {
+  id: ID
+  name: String
+  fireZoneNumber: Int
+  pixelLocationX: Int
+  pixelLocationY: Int
+  fireType: FireType
+  status: FireStatus
+}
+
+input FireLayoutInput {
+  simulatorId: ID!
+  id: ID
+  numberOfFireDecks: Int
+  fireDecks: [FireDeckInput]
+}
+
+input FireDeckInput {
+  simulatorId: ID
+  deckNumber: Int
+  id: ID
+  name: String
+  numberOfFireZones: Int
+  fireZones: [FireZoneInput]
+}
+
+input FireZoneInput {
+  simulatorId: ID
+  deckNumber: Int
+  id: ID
+  fireZoneNumber: Int
+  name: String
+  pixelLocationX: Int
+  pixelLocationY: Int
+  fireType: FireType
+  status: FireStatus
+}
+
+input RemoveFireInput {
+  simulatorId: ID!
+  deckNumber: Int
+  fireZoneNumber: Int
+}
+
+input UpdateFireDeckInput {
+  simulatorId: ID!
+  deckNumber: Int!
+  fireDeckInput: FireDeckInput!
+}
+
+input UpdateFireZoneInput {
+  simulatorId: ID!
+  deckNumber: Int!
+  fireZoneNumber: Int!
+  fireZoneInput: FireZoneInput!
+}
+
+input StopFireInput {
+  simulatorId: ID!
+  deckNumber: Int!
+  fireZoneNumber: Int!
+  materialType: MaterialType!
+  fireStatus: FireStatus
+  isAdmin: Boolean
+}
+
+enum FireStatus {
+  BURNING
+  NORMAL
+  BEING_PUT_OUT
+}
+
+enum FireType {
+  CHEMICAL
+  NORMAL
+  OIL
+}
+
+enum MaterialType {
+  WATER
+  CO2
+  SAND
 }
 
 type ShortRangeComm implements SystemInterface {

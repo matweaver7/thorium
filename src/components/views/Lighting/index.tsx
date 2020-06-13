@@ -25,7 +25,6 @@ export const LightingOptions = () => (
     <option value="darken">Darken</option>
     <option value="blackout">Blackout</option>
     <option value="work">Work</option>
-    <hr />
     <option value="fade">Fade</option>
     <option value="oscillate">Oscillate</option>
     <option value="strobe">Strobe</option>
@@ -181,7 +180,7 @@ const LightingCore: React.FC<{simulator: Simulator}> = ({simulator: {id}}) => {
         <Col sm={4}>
           <div>
             <label>Intensity</label>
-            <Input
+            {/* <Input
               type="range"
               min="0"
               max="1"
@@ -196,7 +195,7 @@ const LightingCore: React.FC<{simulator: Simulator}> = ({simulator: {id}}) => {
                   },
                 })
               }
-            />
+            /> */}
           </div>
           <div>
             <label>

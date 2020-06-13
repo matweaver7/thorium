@@ -129,29 +129,36 @@ const resolver = {
     ) {
       let returnSystems = App.systems;
       if (extra === false) {
+        console.log("here");
         returnSystems = returnSystems.filter(s => s.extra === false);
       }
       if (simulatorId) {
+        console.log("here1");
         returnSystems = returnSystems.filter(
           s => s.simulatorId === simulatorId,
         );
       }
       if (type) {
+        console.log("here2");
         returnSystems = returnSystems.filter(s => s.type === type);
       }
       if (power) {
+        console.log("here3");
         returnSystems = returnSystems.filter(
           s => s?.power?.power || s?.power?.power === 0,
         );
       }
       if (heat) {
+        console.log("here4");
         returnSystems = returnSystems.filter(s => s.heat || s.heat === 0);
       }
       if (damageWhich) {
+        console.log("here5");
         returnSystems = returnSystems.filter(
           s => s.damage.which === damageWhich,
         );
       }
+      console.log(returnSystems);
       return returnSystems;
     },
   },

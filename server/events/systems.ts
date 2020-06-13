@@ -43,6 +43,11 @@ const sendUpdate = sys => {
       "tractorBeamUpdate",
       App.systems.filter(s => s.type === "TractorBeam"),
     );
+  if (sys.type === "ShipFires")
+    pubsub.publish(
+      "phasersUpdate",
+      App.systems.filter(s => s.type === "ShipFires"),
+    );
   if (sys.type === "Phasers")
     pubsub.publish(
       "phasersUpdate",

@@ -51,6 +51,7 @@ import "./environment";
 import "./commandLine.js";
 import "./trigger";
 import "./taskReport.js";
+import "./shipFire.js";
 import "./subspaceField.js";
 import "./transwarp.js";
 import "./interface.js";
