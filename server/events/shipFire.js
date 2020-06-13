@@ -133,12 +133,13 @@ App.on("updateFireZone", ({updateFireZoneInput}) => {
 App.on("moveFireDeck", ({updateFireZoneInput}) => {
   const fireLayout = getFireLayout(updateFireZoneInput.simulatorId);
   if (fireLayout) {
-    const deck = fireLayout.getDeck(updateFireZoneInput.deckNumber);
+    let deck = fireLayout.getDeck(updateFireZoneInput.deckNumber);
+    const newDeckNumber = updateFireZoneInput.fireZoneInput.deckNumber;
+    let newDeck;
     if (deck) {
       const zone = deck.getZone(updateFireZoneInput.fireZoneNumber);
       deck.removeFireZone(updateFireZoneInput.fireZoneNumber);
-      const newDeckNumber = updateFireZoneInput.fireZoneInput.deckNumber;
-      let newDeck = fireLayout.getDeck(newDeckNumber);
+      newDeck = fireLayout.getDeck(newDeckNumber);
       if (!newDeck) {
         fireLayout.addFireDeck({
           simulatorId: updateFireZoneInput.simulatorId,
@@ -168,7 +169,29 @@ App.on("moveFireDeck", ({updateFireZoneInput}) => {
         );
       }
     } else {
-      return "No Decks";
+      if (updateFireZoneInput.deckNumber === 0) {
+        deck = fireLayout.getDeck(updateFireZoneInput.fireZoneInput.deckNumber);
+        if (!deck) {
+          fireLayout.addFireDeck({
+            simulatorId: updateFireZoneInput.simulatorId,
+            deckNumber: updateFireZoneInput.fireZoneInput.deckNumber,
+            numberOfFireZones: 0,
+            fireZones: [],
+          });
+          deck = fireLayout.getDeck(
+            updateFireZoneInput.fireZoneInput.deckNumber,
+          );
+        }
+        if (deck) {
+          deck.addFireZone(updateFireZoneInput.fireZoneInput);
+          pubsub.publish(
+            "fireLayoutUpdated",
+            App.systems.filter(s => s.type === "ShipFires"),
+          );
+        }
+      } else {
+        return "No Decks";
+      }
     }
   } else {
     return "Simulator not found";

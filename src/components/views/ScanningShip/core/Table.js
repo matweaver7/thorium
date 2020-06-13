@@ -12,23 +12,6 @@ import {
 import {useMutation} from "react-apollo";
 import gql from "graphql-tag.macro";
 
-const UPDATE_ZONE = gql`
-  mutation UPDATE_ZONE(
-    $simulatorId: ID!
-    $deckNumber: Int!
-    $zoneNumber: Int!
-    $input: FireZoneInput!
-  ) {
-    updateFireZone(
-      updateFireZoneInput: {
-        simulatorId: $simulatorId
-        deckNumber: $deckNumber
-        fireZoneNumber: $zoneNumber
-        fireZoneInput: $input
-      }
-    )
-  }
-`;
 const UPDATE_FIRE_ZONE = gql`
   mutation UPDATE_DECK(
     $simulatorId: ID!
@@ -47,8 +30,8 @@ const UPDATE_FIRE_ZONE = gql`
   }
 `;
 
-const MOVE_FIRE_DECK = gql`
-  mutation MOVE_DECK(
+const MOVE_FIRE_ZONE = gql`
+  mutation MOVE_ZONE(
     $simulatorId: ID!
     $deckNumber: Int!
     $zoneNumber: Int!
@@ -60,6 +43,22 @@ const MOVE_FIRE_DECK = gql`
         deckNumber: $deckNumber
         fireZoneNumber: $zoneNumber
         fireZoneInput: $input
+      }
+    )
+  }
+`;
+
+const REMOVE_FIRE_ZONE = gql`
+  mutation REMOVE_FIRE_ZONE(
+    $simulatorId: ID!
+    $deckNumber: Int!
+    $zoneNumber: Int!
+  ) {
+    removeFireZone(
+      removeFireInput: {
+        simulatorId: $simulatorId
+        deckNumber: $deckNumber
+        fireZoneNumber: $zoneNumber
       }
     )
   }
@@ -77,7 +76,7 @@ const FireManagementTable = ({simulatorId, fireLayout}) => {
   const [inputPixelX, setInputPixelX] = React.useState(0);
   const [inputPixelY, setInputPixelY] = React.useState(0);
 
-  const setupModalData = rowNumber => {
+  const setupModalEditData = rowNumber => {
     const row = document.querySelector("#row-" + rowNumber);
     const inputs = row.querySelectorAll("[data-target]");
     inputs.forEach(input => {
@@ -105,6 +104,19 @@ const FireManagementTable = ({simulatorId, fireLayout}) => {
       }
     });
   };
+
+  const setupModalAddData = () => {
+    setInputDeck(0);
+    setDefaultDeckNumber(0);
+    setInputZone(0);
+    setDefaultZoneNumber(0);
+    setInputName(null);
+    setInputStatus(null);
+    setInputFireType(null);
+    setInputPixelX(0);
+    setInputPixelY(0);
+  };
+
   const resetStateData = () => {
     setInputDeck(0);
     setDefaultDeckNumber(0);
@@ -118,7 +130,8 @@ const FireManagementTable = ({simulatorId, fireLayout}) => {
   };
 
   const [UpdateZoneMutation] = useMutation(UPDATE_FIRE_ZONE);
-  const [MoveZoneMutation] = useMutation(MOVE_FIRE_DECK);
+  const [MoveZoneMutation] = useMutation(MOVE_FIRE_ZONE);
+  const [RemoveZoneMutation] = useMutation(REMOVE_FIRE_ZONE);
 
   const renderedTable = React.useMemo(() => {
     let table = [];
@@ -137,8 +150,29 @@ const FireManagementTable = ({simulatorId, fireLayout}) => {
             <td data-target="controller">
               <Button
                 data-target-row={i}
-                onClick={() => {
-                  //handleRemoveClick
+                onClick={e => {
+                  e.preventDefault();
+                  const rowNumber = e.target.getAttribute("data-target-row");
+                  const row = document.querySelector("#row-" + rowNumber);
+                  const inputs = row.querySelectorAll("[data-target]");
+                  let deckNumber = 0;
+                  let zoneNumber = 0;
+                  inputs.forEach(input => {
+                    if (input.getAttribute("data-target") === "deck") {
+                      deckNumber = parseInt(input.innerText);
+                    }
+                    if (input.getAttribute("data-target") === "zone") {
+                      zoneNumber = parseInt(input.innerText);
+                    }
+                  });
+                  RemoveZoneMutation({
+                    variables: {
+                      simulatorId: simulatorId,
+                      deckNumber: deckNumber,
+                      zoneNumber: zoneNumber,
+                    },
+                  });
+                  //resetStateData();
                 }}
                 color="danger"
               >
@@ -148,7 +182,7 @@ const FireManagementTable = ({simulatorId, fireLayout}) => {
                 data-target-row={i}
                 onClick={e => {
                   e.preventDefault();
-                  setupModalData(e.target.getAttribute("data-target-row"));
+                  setupModalEditData(e.target.getAttribute("data-target-row"));
                   setmodalIsOpen(!modalIsOpen);
                 }}
                 color="warning"
@@ -182,7 +216,8 @@ const FireManagementTable = ({simulatorId, fireLayout}) => {
       </Table>
       <Button
         onClick={() => {
-          //addRowClick
+          setupModalAddData();
+          setmodalIsOpen(!modalIsOpen);
         }}
       >
         + Add Row
@@ -192,12 +227,14 @@ const FireManagementTable = ({simulatorId, fireLayout}) => {
         isOpen={modalIsOpen}
         toggle={() => {
           setmodalIsOpen(!modalIsOpen);
+          resetStateData();
         }}
         size="large"
       >
         <ModalHeader
           toggle={() => {
             setmodalIsOpen(!modalIsOpen);
+            resetStateData();
           }}
         >
           Change Client ID
@@ -259,6 +296,7 @@ const FireManagementTable = ({simulatorId, fireLayout}) => {
             color="secondary"
             onClick={() => {
               setmodalIsOpen(!modalIsOpen);
+              resetStateData();
             }}
           >
             Cancel

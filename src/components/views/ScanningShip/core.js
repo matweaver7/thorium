@@ -62,8 +62,10 @@ const ScanningShipCore = props => {
   );
   useSubscribeToMore(subscribeToMore, SUBSCRIBE_LAYOUT, subConfig);
   if (loading || !data) return null;
-  console.log(data);
-  const fireLayout = data.FireLayout[0];
+  let fireLayout = {};
+  if (data.FireLayout) {
+    fireLayout = data.FireLayout[0];
+  }
 
   return (
     <div>
