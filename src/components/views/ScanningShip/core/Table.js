@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React from "react";
 import {
   Table,
   Button,
@@ -320,7 +320,7 @@ const FireManagementTable = ({simulatorId, fireLayout}) => {
                   },
                 },
               };
-              if (inputDeck != defaultDeckNumber) {
+              if (inputDeck !== defaultDeckNumber) {
                 MoveZoneMutation(variables);
               } else {
                 UpdateZoneMutation(variables);
