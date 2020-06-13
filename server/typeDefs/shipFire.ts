@@ -143,7 +143,7 @@ const resolver = {
       if (simulatorId)
         returnVal = returnVal.filter(i => i.simulatorId === simulatorId);
       returnVal = returnVal[0].getZone(deckNumber, zoneNumber);
-      return returnVal;
+      return [returnVal];
     },
   },
   Mutation: {
