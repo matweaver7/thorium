@@ -12,6 +12,18 @@ class FireZone {
     this.fireType = params.fireType || "NORMAL";
     this.status = params.status || "NORMAL";
   }
+  getData() {
+    return {
+      class: this.class,
+      id: this.id,
+      name: this.name,
+      fireZoneNumber: this.fireZoneNumber,
+      pixelLocationX: this.pixelLocationX,
+      pixelLocationY: this.pixelLocationY,
+      fireType: this.fireType,
+      status: this.status,
+    };
+  }
   updateFireZone(params) {
     if (params.id) {
       this.id = params.id;
@@ -115,6 +127,7 @@ export default class ShipFires extends System {
     super(params);
     this.class = "ShipFires";
     this.type = "ShipFires";
+    this.imagePath = params.imagePath || null;
     this.simulatorId = params.simulatorId || null;
     this.id = params.id || uuid.v4();
     this.fireDecks = [];
@@ -147,6 +160,9 @@ export default class ShipFires extends System {
     }
     if (params.name) {
       this.name = params.name;
+    }
+    if (params.changeImage) {
+      this.imagePath = params.imagePath;
     }
     if (params.numberOfFireDecks) {
       this.numberOfFireDecks = params.numberOfFireDecks;

@@ -30,6 +30,8 @@ export default async function uploadAsset(root, args, context) {
       );
       const fileName = name ? `${name}${extension}` : file.originalname;
       const filePath = `${assetDir}${folderPath}/${fileName}`;
+      console.log(fileName);
+      console.log(filePath);
       return new Promise(resolve =>
         ncp(file.path, filePath, err => {
           if (err) {

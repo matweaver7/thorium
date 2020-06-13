@@ -12,6 +12,7 @@ const schema = gql`
     name: String
     displayName: String
     upgradeName: String
+    imagePath: String
     upgraded: Boolean
     damage: Damage
     power: Power
@@ -42,6 +43,8 @@ const schema = gql`
     simulatorId: ID!
     id: ID
     numberOfFireDecks: Int
+    imagePath: String
+    changeImage: Boolean
     fireDecks: [FireDeckInput]
   }
   input FireDeckInput {

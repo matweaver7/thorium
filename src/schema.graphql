@@ -3322,6 +3322,7 @@ type FireLayout implements SystemInterface {
   name: String
   displayName: String
   upgradeName: String
+  imagePath: String
   upgraded: Boolean
   damage: Damage
   power: Power
@@ -3353,6 +3354,8 @@ input FireLayoutInput {
   simulatorId: ID!
   id: ID
   numberOfFireDecks: Int
+  imagePath: String
+  changeImage: Boolean
   fireDecks: [FireDeckInput]
 }
 

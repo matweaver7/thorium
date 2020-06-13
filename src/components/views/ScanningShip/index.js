@@ -1,11 +1,14 @@
 import React from "react";
 import gql from "graphql-tag.macro";
 import useQueryAndSubscription from "helpers/hooks/useQueryAndSubscribe";
-import FireTable from "./view/FireTable.js";
+import FireTable from "./view/FireTable";
+import ShipImage from "./view/ShipImage";
+
 const GET_INITIAL = gql`
   query GET_INITIAL($simulatorId: ID!) {
     FireLayout(simulatorId: $simulatorId) {
       numberOfFireDecks
+      imagePath
       fireDecks {
         deckNumber
         numberOfFireZones
@@ -26,6 +29,7 @@ const SUBSCRIBE_LAYOUT = gql`
   subscription SUBSCRIBE_LAYOUT($simulatorId: ID!) {
     fireLayoutUpdated(simulatorId: $simulatorId) {
       numberOfFireDecks
+      imagePath
       fireDecks {
         deckNumber
         numberOfFireZones
@@ -52,11 +56,20 @@ const ScanningShip = props => {
   if (!data || loading) return null;
   const {FireLayout} = data;
 
-  return (
-    <div>
-      <FireTable fireLayout={FireLayout[0]} />
-    </div>
-  );
+  const ImageOrTable = () => {
+    if (FireLayout[0].imagePath) {
+      return (
+        <ShipImage
+          imagePath={FireLayout[0].imagePath}
+          fireLayout={FireLayout[0]}
+        />
+      );
+    } else {
+      return <FireTable fireLayout={FireLayout[0]} />;
+    }
+  };
+
+  return <div>{ImageOrTable()}</div>;
 };
 
 export default ScanningShip;

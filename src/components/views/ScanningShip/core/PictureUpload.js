@@ -1,99 +1,87 @@
-import React, {Component} from "react";
+import React from "react";
 import {Spinner, Button} from "reactstrap";
+import {useMutation} from "react-apollo";
+import gql from "graphql-tag.macro";
 
-class PictureUpload extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      uploading: false,
-      images: [],
-    };
-    this.Change = this.Change.bind(this);
-    this.removeImage = this.removeImage.bind(this);
-  }
-
-  Change(e) {
-    const files = Array.from(e.target.files);
-    this.setState({uploading: true});
-
-    var file = files[0];
-    console.log(file);
-    var reader = new FileReader();
-    var url = reader.readAsDataURL(file);
-
-    reader.onloadend = e => {
-      this.setState({
-        images: [{url: reader.result}],
-      });
-    };
-
-    console.log(url); // Would see a path?
-
-    this.setState({uploading: false});
-
-    // const formData = new FormData()
-
-    // files.forEach((file, i) => {
-    //     formData.append(i, file)
-    // })
-
-    // fetch(`${API_URL}/image-upload`, {
-    //     method: 'POST',
-    //     body: formData
-    // })
-    // .then(res => res.json())
-    // .then(images => {
-    //     this.setState({
-    //         uploading: false,
-    //         images
-    //     })
-    // })
-  }
-
-  removeImage() {
-    this.setState({
-      images: [],
-    });
-  }
-
-  render() {
-    const {uploading, images} = this.state;
-
-    const content = () => {
-      switch (true) {
-        case uploading:
-          return <Spinner />;
-        case images.length > 0:
-          return (
-            <div>
-              <img alt="ship" src={this.state.images[0].url} />
-              <Button onClick={this.removeImage} color="danger">
-                Remove
-              </Button>
-            </div>
-          );
-        default:
-          return (
-            <div>
-              <input type="file" onChange={this.Change}></input>
-              <br />
-              <br />
-            </div>
-          );
+const UPDATE_IMAGE = gql`
+  mutation UPDATE_IMAGE($simulatorId: ID!, $imagePath: String) {
+    updateFireLayout(
+      firelayoutInput: {
+        simulatorId: $simulatorId
+        imagePath: $imagePath
+        changeImage: true
       }
-    };
-
-    return (
-      <div>
-        <h1>
-          Hello Welcome to Mat's cool uploader. Please upload an image below:
-        </h1>
-        <br />
-        <br />
-        <div className="buttons">{content()}</div>
-      </div>
-    );
+    )
   }
-}
+`;
+const PictureUpload = ({simulatorId, imagePath}) => {
+  const [isUploading, setIsUploading] = React.useState(false);
+
+  const [UpdateImageMutation] = useMutation(UPDATE_IMAGE);
+  console.log(imagePath);
+
+  const removeImage = () => {
+    UpdateImageMutation({
+      variables: {simulatorId: simulatorId, imagePath: null},
+    });
+  };
+  const submitImage = e => {
+    setIsUploading(true);
+    const files = Array.from(e.target.files);
+
+    const formData = new FormData();
+    files.forEach((file, i) => {
+      formData.append(i, file);
+    });
+    formData.append("folderPath", "/Misc");
+
+    fetch(`/upload`, {
+      method: "POST",
+      body: formData,
+    })
+      .then(res => res.json())
+      .then(res => setIsUploading(false))
+      .then(() => {
+        if (files.length > 0) {
+          const path = "/assets/Misc/" + files[0].name;
+          UpdateImageMutation({
+            variables: {simulatorId: simulatorId, imagePath: path},
+          });
+        }
+      });
+  };
+
+  const content = () => {
+    if (isUploading) {
+      return <Spinner />;
+    } else if (imagePath) {
+      return (
+        <div>
+          <img alt="ship" src={imagePath} />
+          <Button onClick={removeImage} color="danger">
+            Remove
+          </Button>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <input type="file" onChange={submitImage}></input>
+          <br />
+          <br />
+        </div>
+      );
+    }
+  };
+
+  return (
+    <div>
+      <h1>Fire System Manager</h1>
+      <br />
+      <br />
+      <div className="buttons">{content()}</div>
+    </div>
+  );
+};
 
 export default PictureUpload;

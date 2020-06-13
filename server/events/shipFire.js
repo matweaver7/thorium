@@ -12,12 +12,12 @@ function getFireLayout(simulatorId) {
   }
 }
 
-App.on("updateFireLayout", ({fireLayoutInput}) => {
+App.on("updateFireLayout", ({firelayoutInput}) => {
   const systems = App.systems.filter(s => s.type === "ShipFires");
   const fireLayout = systems.filter(
-    i => i.simulatorId === fireLayoutInput.simulatorId,
+    i => i.simulatorId === firelayoutInput.simulatorId,
   )[0];
-  fireLayout.updateLayout(fireLayoutInput);
+  fireLayout.updateLayout(firelayoutInput);
   pubsub.publish(
     "fireLayoutUpdated",
     App.systems.filter(s => s.type === "ShipFires"),

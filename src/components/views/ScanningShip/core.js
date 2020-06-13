@@ -1,13 +1,14 @@
 import React from "react";
 import PictureUpload from "./core/PictureUpload";
+import FireManagementTable from "./core/Table";
 import gql from "graphql-tag.macro";
 import useQueryAndSubscription from "helpers/hooks/useQueryAndSubscribe";
-import FireManagementTable from "./core/Table";
 
 const GET_INITIAL = gql`
   query GET_INITIAL($simulatorId: ID!) {
     FireLayout(simulatorId: $simulatorId) {
       numberOfFireDecks
+      imagePath
       fireDecks {
         deckNumber
         numberOfFireZones
@@ -28,6 +29,7 @@ const SUBSCRIBE_LAYOUT = gql`
   subscription SUBSCRIBE_LAYOUT($simulatorId: ID!) {
     fireLayoutUpdated(simulatorId: $simulatorId) {
       numberOfFireDecks
+      imagePath
       fireDecks {
         deckNumber
         numberOfFireZones
@@ -56,7 +58,10 @@ const ScanningShipCore = props => {
 
   return (
     <div>
-      <PictureUpload />
+      <PictureUpload
+        simulatorId={simulator.id}
+        imagePath={FireLayout[0].imagePath}
+      />
       <FireManagementTable
         simulatorId={simulator.id}
         fireLayout={FireLayout[0]}
