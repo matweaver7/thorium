@@ -67,7 +67,9 @@
   },
   "proxy": "http://localhost:3001",
   "nodemonConfig": {
-    "watch": ["server/"],
+    "watch": [
+      "server/"
+    ],
     "ignore": [
       ".git",
       "./src/*",
@@ -88,8 +90,12 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": ["eslint"],
-    "*.{css,scss}": ["stylelint"],
+    "*.{js,jsx,ts,tsx}": [
+      "eslint"
+    ],
+    "*.{css,scss}": [
+      "stylelint"
+    ],
     "**/*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|mdx|graphql|vue)": [
       "prettier --write"
     ]
@@ -106,7 +112,9 @@
     "directories": {
       "output": "./packages"
     },
-    "publish": { "provider": "github" },
+    "publish": {
+      "provider": "github"
+    },
     "files": [
       "electron/**/*",
       "!**/node_modules/**/*",
@@ -135,10 +143,15 @@
       ]
     },
     "win": {
-      "target": ["zip", "portable"],
+      "target": [
+        "zip",
+        "portable"
+      ],
       "icon": "./public/icon.ico"
     },
-    "linux": { "category": "Utility" }
+    "linux": {
+      "category": "Utility"
+    }
   },
   "bin": "./server/index.js",
   "pkg": {
@@ -196,6 +209,7 @@
     "@serialport/bindings": "^9.0.0",
     "@types/luxon": "^1.21.0",
     "@types/match-sorter": "^4.0.0",
+    "@types/react-dom": "^16.9.8",
     "@types/react-measure": "^2.0.6",
     "@types/reactstrap": "^8.4.1",
     "@types/styled-components": "^5.1.0",
@@ -223,7 +237,7 @@
     "fuse.js": "^6.0.0",
     "gl-matrix": "^3.2.1",
     "googleapis": "^51.0.0",
-    "graphql": "^15.0.0",
+    "graphql": "15.0.0",
     "graphql-bigint": "^1.0.0",
     "graphql-type-json": "^0.3.0",
     "graphql.macro": "^1.4.2",
